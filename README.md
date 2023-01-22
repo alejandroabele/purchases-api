@@ -30,7 +30,7 @@ $ npm install
 
 ### Configuración de propiedades
 
-En la base del directorio del proyecto se puede encontrar el archivo `.env` con propiedades de entorno de la aplicación.
+En la base del directorio del proyecto se deberá crear el archivo `.env` con propiedades de entorno de la aplicación.
 
 En este archivo puede configurar:
 
