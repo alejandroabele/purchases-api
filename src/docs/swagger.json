@@ -1,0 +1,454 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Purchases API",
+    "description": "Purchases and product manager api",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4555/api/"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "number page of page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "size of page, default value is 10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "filter by name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "filter by currency",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsSuccess"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsSuccess"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSuccess"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSuccess"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductNotFound"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success Purchases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseSuccess"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseSuccess"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Product not found in purchases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseProductNotFound"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseProductNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "PurchaseSuccess": {
+        "description": "Éxito al realizar la operación",
+        "content": {
+          "application/json": {
+            "example": {
+              "metadata": {},
+              "data": {
+                "currency": "USD",
+                "quantity": 1,
+                "totalAmount": 5.2,
+                "user": "63cada670677729b7939e349",
+                "product": "63ca2323a3c4fa10013fe5b5"
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "product 2"
+          },
+          "price": {
+            "type": "number",
+            "example": 2.5
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "image": {
+            "type": "string",
+            "example": "url:image"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "Product"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "alejandro"
+          },
+          "email": {
+            "type": "string",
+            "example": "alejandroabele@hotmail.com"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "Purchase": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "totalAmount": {
+            "type": "number",
+            "example": 5.2
+          },
+          "user": {
+            "type": "string",
+            "example": "63cada670677729b7939e349"
+          },
+          "product": {
+            "type": "string",
+            "example": "63ca2323a3c4fa10013fe5b5"
+          }
+        },
+        "xml": {
+          "name": "Purchase"
+        }
+      },
+      "PurchaseRequest": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "type": "string",
+            "example": "63ca2323a3c4fa10013fe5b5"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 5
+          },
+          "user": {
+            "type": "string",
+            "example": "63cada670677729b7939e349"
+          }
+        },
+        "xml": {
+          "name": "PurchaseRequest"
+        }
+      },
+      "PurchaseSuccess": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {}
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "example": "USD"
+              },
+              "quantity": {
+                "type": "number",
+                "example": 1
+              },
+              "totalAmount": {
+                "type": "number",
+                "example": 5.2
+              },
+              "user": {
+                "type": "string",
+                "example": "63cada670677729b7939e349"
+              },
+              "product": {
+                "type": "string",
+                "example": "63ca2323a3c4fa10013fe5b5"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "PurchaseSuccess"
+        }
+      },
+      "ProductSuccess": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {}
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "63ca2323a3c4fa10013fe5b5"
+              },
+              "name": {
+                "type": "string",
+                "example": "pepito"
+              },
+              "price": {
+                "type": "number",
+                "example": 1.5
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD"
+              },
+              "quantity": {
+                "type": "number",
+                "example": 15
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "ProductSuccess"
+        }
+      },
+      "PurchaseProductNotFound": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Product not found"
+          }
+        },
+        "xml": {
+          "name": "PurchaseProductNotFound"
+        }
+      },
+      "ProductNotFound": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Product not found"
+          }
+        },
+        "xml": {
+          "name": "ProductNotFound"
+        }
+      },
+      "ProductsSuccess": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number",
+                "example": 1
+              },
+              "total_records": {
+                "type": "number",
+                "example": 44
+              }
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "63ca24a6bc212582cf2fbfa2"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "product 3"
+                },
+                "price": {
+                  "type": "number",
+                  "example": 1223.2
+                },
+                "currency": {
+                  "type": "string",
+                  "example": "USD"
+                },
+                "quantity": {
+                  "type": "number",
+                  "example": 15
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2023-01-20T05:20:38.338Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2023-01-20T05:20:38.338Z"
+                },
+                "__v": {
+                  "type": "number",
+                  "example": 0
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "ProductsSuccess"
+        }
+      }
+    }
+  }
+}
